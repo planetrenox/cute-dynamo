@@ -1,0 +1,27 @@
+{
+  "name": "cute-dynamo",
+  "version": "0.1.2",
+  "description": "Experimental piercer stronghold. No tests.",
+  "type": "module",
+  "main": "src/index.js",
+  "bin": {
+    "cute-dynamo": "src/cli.js"
+  },
+  "scripts": {
+    "postinstall": "echo 'Customize this postinstall string in package.json'",
+    "index": "node ./src/index.js",
+    "cli": "node ./src/cli.js"
+  },
+  "exports": "./src/index.js",
+  "keywords": [
+    "cute"
+  ],
+  "author": "",
+  "license": "CC-BY-4.0",
+  "homepage": "",
+  "dependencies": {
+    "@aws-sdk/client-cognito-identity": "^3.515.0",
+    "@aws-sdk/client-dynamodb": "^3.518.0",
+    "@aws-sdk/credential-provider-cognito-identity": "^3.515.0"
+  }
+}
