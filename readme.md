@@ -7,7 +7,7 @@ Make DynamoDB cute with minimalism; worry about network costs later.
 - Fast development.
 - Simple syntax.
 - No pain.
-- I didn't test if this works yet
+- Needs more testing.
 - Uses 'latest' aws packages ALWAYS.
 
 ## Why
@@ -19,11 +19,7 @@ Cute tables are **minimalistic** and only allow **1 attribute per item** which i
 
 By design of DynamoDB, each item is limited to 400kb in size no matter how many attributes anyway, so we aren't limiting ourselves.
 
-Usage:   
-**Serverside** with AWS_ACCESS_KEY_ID & AWS_SECRET_ACCESS_KEY   
-**Clientside** with AWS_IDENTITY_POOL_ID
-
-Cute tables **must _adhere_ to naming**: [Primary key name: PK], [Sort key name: SK], [Single attribute name: JSON]
+Cute tables **must _adhere_ to naming**: [Primary key name: **PK**], [Sort key name: **SK**], [Single attribute name: **JSON**]
 
 > ###### **There can't be cute without development speed.**
 
@@ -38,14 +34,44 @@ Cute tables **must _adhere_ to naming**: [Primary key name: PK], [Sort key name:
 ### Usage
 
    ```javascript
-// Initialization
+// Initialization 
 //
-// First, ensure you initialize the DynamoDB client. 
-// Depending on your application context (server-side or client-side),
-// you have two options for initialization:
-    import { init } from 'cute-dynamo'; // (process.env.DYNAMODB_TABLE)
-    await init(); // look in code for env vars naming. 
+// Depending on your application context (server-side or client-side), two ways for init:
+// (FIRST WE SHOW THE PREFFERED WAY)
+// .env variables: DYNAMODB_TABLE, AWS_REGION, AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY
+    import { init } from 'cute-dynamo';
+    await init();
 
+// Putting Items into DynamoDB
+    import { put } from 'cute-dynamo';
+// To store an item you can use put. This implemenation should transform the way you use put.
+// You can deep nest anything and no setup. 
+// Provide JS object you wish to store, along with a primary key
+// REMEMBER: YOUR PRIMARY KEY IN YOUR TABLE MUST BE NAMED 'PK'
+    await put({name: 'Hatsune Miku', age: 16}, 'keyMIKU');
+    // YES YOU CAN NEST ANY LIST OR MAP
+
+// Storing an item with both a primary key and a sort key: (use with sort key is untested!)
+// REMEMBER: YOUR SORT KEY IN YOUR TABLE MUST BE NAMED 'SK'
+    await put({lastLogin: '2024-02-25T08:00:00Z'}, 'keyMIKU', '01010101');
+    // i havent been able to test sortkey use
+
+// Getting Items from DynamoDB
+    import { get } from 'cute-dynamo';
+
+// Retrieving an item using only a primary key:
+    const item = await get('USER01');
+    console.log(item);
+
+// Retrieving an item using both a primary key and a sort key:
+    const item = await get('USER01', 'METADATA001');
+    console.log(item);
+
+// These examples cover the basic operations to get you started with cute-dynamo. 
+// By following the minimalistic design principles of cute-dynamo, you 
+// can ensure a consistent and simplified approach to working with DynamoDB across your projects.
+
+// ALTERNATIVE WAYS TO INIT
 // Server-Side Initialization (using AWS Access Key ID and AWS Secret Access Key):
 // IF YOU DONT WANT TO USE ENV VARS
 //     await init({
@@ -60,32 +86,6 @@ Cute tables **must _adhere_ to naming**: [Primary key name: PK], [Sort key name:
 //         region: 'us-east-1',
 //         identityPoolId: 'us-east-1:exampleId'
 //     });
-
-// Putting Items into DynamoDB
-    import { put } from 'cute-dynamo';
-// To store an item in DynamoDB, you can use the put function. This function requires you to 
-// provide JS object you wish to store, along with a primary key (pk) and an optional sort key (sk).
-
-// Storing an item with only a primary key:
-    await put({name: 'John Doe', age: 30}, 'USER#001');
-
-// Storing an item with both a primary key and a sort key:
-    await put({lastLogin: '2024-02-25T08:00:00Z'}, 'USER#001', 'METADATA#001');
-
-// Getting Items from DynamoDB
-    import { get } from 'cute-dynamo';
-
-// Retrieving an item using only a primary key:
-    const item = await get('USER#001');
-    console.log(item);
-
-// Retrieving an item using both a primary key and a sort key:
-    const item = await get('USER#001', 'METADATA#001');
-    console.log(item);
-
-// These examples cover the basic operations to get you started with cute-dynamo. 
-// By following the minimalistic design principles of cute-dynamo, you 
-// can ensure a consistent and simplified approach to working with DynamoDB across your projects.
    ```
 
 ### FYI

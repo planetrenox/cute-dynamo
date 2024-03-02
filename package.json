@@ -1,6 +1,6 @@
 {
   "name": "cute-dynamo",
-  "version": "0.2.2",
+  "version": "0.2.5",
   "description": "DynamoDB with minimalism.",
   "type": "module",
   "main": "src/index.js",
@@ -14,10 +14,11 @@
   ],
   "author": "",
   "license": "CC-BY-4.0",
-  "homepage": "",
+  "homepage": "https://github.com/planetrenox/cute-dynamo",
   "dependencies": {
     "@aws-sdk/client-cognito-identity": "latest",
     "@aws-sdk/client-dynamodb": "latest",
-    "@aws-sdk/credential-provider-cognito-identity": "latest"
+    "@aws-sdk/credential-provider-cognito-identity": "latest",
+    "@aws-sdk/lib-dynamodb": "latest"
   }
 }
